@@ -8,7 +8,7 @@
 
 ### [Reinforce Learning](ai/reinforce_learning/README.md)
 
-* [安装Reinforce Agent](ai/reinforce_learning/README.md#安装Reinforce Agent)
+* [安装Reinforce Agent](ai/reinforce_learning/README.md#安装ReinforceAgent)
 
 ###  Tensorflow
 
