@@ -1,8 +1,9 @@
 <center>
     <h1>
-        Docker：Gerrit + GitLab + GitHub同步方案
+        Gerrit + GitLab + GitHub同步方案
     </h1>
 </center>
+
 
 ## 简介
 

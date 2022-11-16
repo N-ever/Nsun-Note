@@ -8,13 +8,13 @@
 
 ### [Reinforce Learning](ai/reinforce_learning/README.md)
 
-* [安装Reinforce Agent](ai/reinforce_learning/README.md#安装Reinforce Agent)
+* [安装Reinforce Agent](ai/reinforce_learning/README.md#安装Reinforce-Agent)
 
 ###  Tensorflow
 
 #### [Install](ai\tensorflow\install\README.md)
 
-* [Docker Tensorflow镜像](ai\tensorflow\install\README.md#Docker Tensorflow镜像)
+* [Docker Tensorflow镜像](ai\tensorflow\install\README.md#Docker-Tensorflow镜像)
 
 ## System
 
@@ -56,7 +56,7 @@
 
 * [系统信息获取](tool/docker/install/README.md#系统信息获取)
 * [安装Docker](tool/docker/install/README.md#安装Docker)
-  * [CenterOS 安装](tool/docker/install/README.md#CenterOS 安装)
+  * [CenterOS 安装](tool/docker/install/README.md#CenterOS-安装)
 
 #### [Settings](tool/docker/settings/README.md)
 
@@ -68,15 +68,15 @@
 
 * [简介](tool/server/gerrit_gitlab_github/README.md#简介)
 * [Docker配置](tool/server/gerrit_gitlab_github/README.md#Docker配置)
-  * [Docker Compose Yaml](tool/server/gerrit_gitlab_github/README.md#Docker Compose Yaml)
+  * [Docker Compose Yaml](tool/server/gerrit_gitlab_github/README.md#Docker-Compose-Yaml)
   * [创建配置文件](tool/server/gerrit_gitlab_github/README.md#创建配置文件)
   * [初始化Gerrit容器](tool/server/gerrit_gitlab_github/README.md#初始化Gerrit容器)
   * [初始化所有容器](tool/server/gerrit_gitlab_github/README.md#初始化所有容器)
   * [添加外部访问的端口](tool/server/gerrit_gitlab_github/README.md#添加外部访问的端口)
-  * [Gerrit Nginx配置](tool/server/gerrit_gitlab_github/README.md#Gerrit Nginx配置)
+  * [Gerrit Nginx配置](tool/server/gerrit_gitlab_github/README.md#Gerrit-Nginx配置)
 * [Gerrit与GitHub直接同步](tool/server/gerrit_gitlab_github/README.md#Gerrit与GitHub直接同步)
   * [创建GitHub项目](tool/server/gerrit_gitlab_github/README.md#创建GitHub项目)
-  * [添加SSH KEY](tool/server/gerrit_gitlab_github/README.md#添加SSH KEY)
+  * [添加SSH KEY](tool/server/gerrit_gitlab_github/README.md#添加SSH-KEY)
   * [创建Gerrit项目](tool/server/gerrit_gitlab_github/README.md#创建Gerrit项目)
   * [配置replication插件](tool/server/gerrit_gitlab_github/README.md#配置replication插件)
   * [重启Gerrit](tool/server/gerrit_gitlab_github/README.md#重启Gerrit)
@@ -87,10 +87,10 @@
 
 #### [Openxr Desc](vr/openxr/openxr_desc/README.md)
 
-* [OpenXR 简介](vr/openxr/openxr_desc/README.md#OpenXR 简介)
+* [OpenXR 简介](vr/openxr/openxr_desc/README.md#OpenXR-简介)
   * [OpenXR的目的](vr/openxr/openxr_desc/README.md#OpenXR的目的)
   * [细说OpenXR](vr/openxr/openxr_desc/README.md#细说OpenXR)
-* [OpenXR API](vr/openxr/openxr_desc/README.md#OpenXR 简介)
+* [OpenXR API](vr/openxr/openxr_desc/README.md#OpenXR-API)
 * [相关资料 ](vr/openxr/openxr_desc/README.md#相关资料 )
 
 ## TODO
