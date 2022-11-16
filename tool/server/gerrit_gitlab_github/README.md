@@ -50,67 +50,6 @@ class Server White
 
 用户将代码提交到Gerrit，合并入库后，Gerrit会使用同步插件将代码仓与GitLab上的仓库进行同步，GitLab同步到最新的代码后，又将最新的代码同步到GitHub上，以此来进行所有仓库的同步。这里OpenLDAP管理了两个本地仓库的账号系统。
 
-## Docker 安装
-
-### 系统
-
-```shell
-[root@vultr ~]# cat /etc/redhat-release
-CentOS Linux release 7.9.2009 (Core)
-```
-
-### Docker安装
-
-安装步骤可以从官网查看，因为是服务器，所以只需要安装Docker Engine就够了不需要Docker Desktop。
-
-> [Docker官网](https://docs.docker.com/engine/install/centos/)
-
-#### CenterOS 安装
-
-此处都是使用root账户进行安装，所以都省略了sudo。
-
-##### 配置仓库
-
-安装yum-utils，这个提供了yum-config-manager，为了后续安装仓库
-
-```shell
-$ yum install -y yum-utils
-```
-
-添加Docker的下载仓库
-
-```shell
-$ yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
-```
-
-##### 安装
-
-安装最新版本的Docker并安装命令行工具，容器和compose插件，如果需要安装其他特定版本，请到上面官网链接跳转查看。
-
-> 此处安装的是docker compose插件，不是单独安装的docker compose，所以使用时要用docker compose而不是docker-compose命令
-
-```shell
-$ yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-```
-
-##### 启动
-
-这里启动Docker服务，如果需要开机启动，请使用**systemctl enable**。
-
-```shell
-$ systemctl start docker
-```
-
-##### 测试
-
-```shell
-$ docker run hello-world
-```
-
-到这里Docker已经安装成功了，下面就是配置容器了。
-
 ## Docker配置
 
 下面默认的域名是**nsunever.com**，根据自己需要，替换成自己的域名。
@@ -328,7 +267,7 @@ $ firewall-cmd --zone=public --add-port=9002/tcp --permanent
 $ firewall-cmd --reload
 ```
 
-### Gerrit nginx配置
+### Gerrit Nginx配置
 
 ## Gerrit与GitHub直接同步
 
