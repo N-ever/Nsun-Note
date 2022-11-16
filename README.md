@@ -73,7 +73,7 @@
   * [初始化Gerrit容器](tool/server/gerrit_gitlab_github/README.md#初始化Gerrit容器)
   * [初始化所有容器](tool/server/gerrit_gitlab_github/README.md#初始化所有容器)
   * [添加外部访问的端口](tool/server/gerrit_gitlab_github/README.md#添加外部访问的端口)
-  * [Gerrit Nginx配置](tool/server/gerrit_gitlab_github/README.md#Gerrit Nginx配置)
+  * [Gerrit Nginx配置](tool/server/gerrit_gitlab_github/README.md#"Gerrit Nginx配置")
 * [Gerrit与GitHub直接同步](tool/server/gerrit_gitlab_github/README.md#Gerrit与GitHub直接同步)
   * [创建GitHub项目](tool/server/gerrit_gitlab_github/README.md#创建GitHub项目)
   * [添加SSH KEY](tool/server/gerrit_gitlab_github/README.md#添加SSH KEY)
