@@ -50,7 +50,7 @@ OpenXR作为应用和平台或者设备的桥梁，到底是怎么实现的？
 
 > 由于目前不管是XR行业还是OpenXR都在快速发展中，所以很多系统新增的功能接口各家都在持续进行扩展和申请中，所以很多接口还是作为厂家独有的扩展进行使用，还没有合入OpenXR的公共接口中。
 
-![OpenXR App](src\img\OpenXR_App.png)
+<img src="src\img\helloxr.png" alt="helloxr" style="zoom:50%;float:left" />
 
 上图是OpenXR Demo中最基础的XR应用，此应用可以在支持OpenXR的所有平台上运行。其中有很多概念此处不做过多讲解，主要目的还是为了对OpenXR应用流程有一个简单的概念。
 
