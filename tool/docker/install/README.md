@@ -62,3 +62,66 @@ $ systemctl start docker
 ```shell
 $ docker run hello-world
 ```
+
+### Windows安装
+
+#### 下载Docker
+
+下载程序并安装
+
+> https://www.docker.com/
+
+#### 迁移Docker目录
+
+##### 关闭Docker&wsl
+
+```shell
+$ wsl --shutdown
+```
+
+##### 导出Docker存储
+
+```shell
+$ wsl --export docker-desktop D:\tmp\a.tar
+$ wsl --export docker-desktop-data D:\tmp\b.tar
+```
+
+##### 注销Docker存储
+
+```shell
+$ wsl --unregister docker-desktop
+$ wsl --unregister docker-desktop-data
+```
+
+##### 导入Docker存储
+
+```shell
+$ wsl --import docker-desktop D:\data\docker\docker-desktop D:\tmp\a.tar --version 2
+$ wsl --import docker-desktop-data D:\data\docker\docker-desktop-data D:\tmp\b.tar --version 2
+```
+
+##### 启动Docker
+
+### 创建Ubuntu
+
+#### 拉取Ubuntu镜像
+
+```shell
+$ docker pull ubuntu
+```
+
+#### 创建Ubuntu容器
+
+```shell
+$ docker run -it -d --privileged=true --name pimax -p 10022:22 -v /run/desktop/mnt/host/d/work/docker:/home/evern/work ubuntu
+```
+
+#### 安装SSH
+
+```shell
+$ apt install -y openssh-server openssh-client
+```
+
+#### 更新Root权限
+
+[配置root权限](../settings/README.md#配置root权限)
