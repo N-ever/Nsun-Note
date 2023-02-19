@@ -28,5 +28,6 @@ namespace chapter2 {
 
     void stage1() {
         float_storge();
-    } 
+    }
+
 }

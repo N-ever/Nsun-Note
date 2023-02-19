@@ -39,7 +39,7 @@ namespace algorithm {
 
     void fast_sort() {
         static int ARR_NUM = 10;
-        int test[ARR_NUM]{};
+        int test[ARR_NUM];
         for (int i = 0; i < ARR_NUM; i++) {
             test[i] = rand() % 10000;
             cout << test[i] << " ";

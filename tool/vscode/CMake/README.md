@@ -102,6 +102,12 @@ brew install cmake
 }
 ```
 
+将执行目录添加到**Cmake Language Support**配置中。
+
+![截屏2023-02-19 17.17.08](src/img/vscode_2.png)
+
+
+
 ## CMake项目验证
 
 ### 创建HelloWorld
