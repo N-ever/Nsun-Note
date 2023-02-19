@@ -48,7 +48,7 @@ pacman -S --needed base-devel mingw-w64-x86_64-toolchain
 
 ```powershel
  pacman -S mingw-w64-x86_64-make
- 
+
  pacman -S mingw-w64-x86_64-cmake
 ```
 
@@ -69,6 +69,38 @@ g++ --version
 ```
 
 ![image-20230216100035328](src\img\image-20230216100035328.png)
+
+### MacOS
+
+#### 安装cmake
+
+```shell
+brew install cmake
+```
+
+#### 安装.Net
+
+下载.Net，这里使用的是.Net6.0的版本，由于Vscode安装时会因为权限问题报错，所以这里需要自己自行安装，可能在**Cmake Language Support**插件的详情中找到安装的网址。这里安装完，目录一般在`/usr/local/share/dotnet/x64/dotnet`。
+
+| 安装文件                                                     | 安装文档                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [SDK 6.0.406 x64](https://download.visualstudio.microsoft.com/download/pr/8a0c7611-7ca1-49d7-a889-e6514fc29dd0/08927286063140ccdf88eafe0e3bd2fb/dotnet-sdk-6.0.405-osx-x64.pkg) | [Install .NET on macOS](https://learn.microsoft.com/en-us/dotnet/core/install/macos) |
+
+配置.Net的执行目录
+
+<img src="src/img/vscode_1.png" alt="截屏2023-02-19 16.18.58"  />
+
+将执行目录添加到配置文件中。
+
+```json
+{
+    "cmake.configureOnOpen": true,
+    "dotnetAcquisitionExtension.existingDotnetPath": [
+        {"extensionId": "msazurermtools.azurerm-vscode-tools", "path": "/usr/local/share/dotnet/x64/dotnet"}
+    ],
+    "explorer.confirmDelete": false
+}
+```
 
 ## CMake项目验证
 
