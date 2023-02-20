@@ -11,7 +11,7 @@
 使用free查看swap信息。
 
 ```shell
-$ free 
+$ free
               total        used        free      shared  buff/cache   available
 Mem:        1015528      760420       75804       51264      179304       69948
 Swap:             0           0           0

@@ -73,21 +73,21 @@ struct
  app render: active, c, 2000-01-01-04-00, 4h
  xrEndFrame: milestone, d, 2000-01-01-09-00, 1m
  runtime render: active, e, 2000-01-01-10-00, 30m
- 
+
  xrWaitFrame: active, a, 2000-01-01-12-00, 2h
  xrBeginFrame: milestone, b, 2000-01-01-15-00,1m
- 
+
  section Runtime
  compose: active, a, 2000-01-01-11-00, 1.5h
  display: active, t1, 2000-01-01-13-00,30m
- 
+
  section Time Point
  predicted_ns: milestone, t1, 2000-01-01-00-00,1m
  wait_woke_ns: milestone, t2, 2000-01-01-02-00,1m
  begin_ns: milestone, t3, 2000-01-01-03-00, 1m
  delivered_ns: milestone, t4, 2000-01-01-09-00, 1m
  gpu_done_ns: milestone, t4, 2000-01-01-10-30, 1m
- 
+
  section Period
  cpu_time_ns: active, a, 2000-01-01-02-00, 1h
  draw_time_ns: active, a, 2000-01-01-03-00, 6h

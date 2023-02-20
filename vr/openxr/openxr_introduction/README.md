@@ -158,7 +158,7 @@ OpenXR平台端其实主要是去实现OpenXR的接口，完成他的功能。�
 * 对于平台，就是需要去实现OpenXR的标准接口，来适配OpenXR应用。
 * OpenXR的发展能大大加快XR行业的发展，为那些还没有内容的厂家提供更多的可能性。
 
-## 相关资料 
+## 相关资料
 
 * [OpenXR官网](https://www.khronos.org/openxr/)
 * [OpenXR Sample Code: OpenXR-SDK-Source](https://github.com/KhronosGroup/OpenXR-SDK-Source)
