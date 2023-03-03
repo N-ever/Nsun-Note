@@ -1,4 +1,7 @@
-life
 build
 .vscode
 .DS_Store
+.cxx
+.gradle
+__pycache__
+.idea

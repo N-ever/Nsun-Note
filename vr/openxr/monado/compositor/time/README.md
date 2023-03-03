@@ -25,7 +25,7 @@ struct
 * `wait_woke_ns`: 调用**xrWaitFrame**返回的时间。
 * `begin_ns`: 调用**xrBeginFrame**的时间。
 * `delivered_ns`: 调用**xrEndFrame**的时间。
-* `gpu_done_ns`: App端图像处理完成的时间。
+* `.`: App端图像处理完成的时间。
 
 ```c
 struct
