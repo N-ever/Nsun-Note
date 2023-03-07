@@ -124,4 +124,4 @@ $ apt install -y openssh-server openssh-client
 
 #### 更新Root权限
 
-[配置root权限](../settings/README.md#配置root权限)
+[配置root权限](../Settings/README.md#配置root权限)

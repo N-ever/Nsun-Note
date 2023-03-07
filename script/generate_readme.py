@@ -2,7 +2,7 @@ from pathlib import Path
 import re
 
 README_FILE = 'README.md'
-TITLE_CATALOGUE = '## Catalogue'
+TITLE_CATALOGUE = '## Catalogue\n'
 SPLIT_TITLE = '<!--title-->'
 SPLIT_TILE = '<!--tile-->'
 EXCLUDE_DIR = ['script', 'vr/openxr/monado/performance/project/OpenXR-SDK-Source', 'language/c++/c++primer']
@@ -56,7 +56,7 @@ class ReadmeInfo:
         return parent_list
 
     def __str__(self) -> str:
-        return str(self.file_path.relative_to(self.root_path))
+        return str(self.file_path.relative_to(self.root_path)).replace('\\', '/')
 
         
     def __len__(self):
@@ -150,7 +150,7 @@ def generate_readme(root_path, readme_path, title, catalogue, tile):
     main_readme_info = ReadmeInfo(root_path, readme_path) 
     with open(readme_path, 'w+', encoding='utf-8') as f:
         f.write(title + '\n')
-        f.write(SPLIT_TITLE + "\n")
+        f.write(SPLIT_TITLE + "\n\n")
         f.write(main_readme_info.to_catalogue(TITLE_CATALOGUE, False) + '\n')
         f.write('## Content\n')
         f.write(catalogue_content)
