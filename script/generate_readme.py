@@ -9,17 +9,17 @@ EXCLUDE_DIR = ['script', 'vr/openxr/monado/performance/project/OpenXR-SDK-Source
 RE_TITLE_FORMAT = re.compile('<center>\s*<h1>(.*)</h1>.*', re.DOTALL)
 RE_SECOND_TITLE_FORMAT = '## '
 RE_THIRD_TITLE_FORMAT = '### '
-TITLE_FORMAT = '{} {}\n'
-CONTETN_FORMAT = '* {}\n'
-SECOND_CONTETN_FORMAT = '  * {}\n'
+TITLE_FORMAT = '{} {}\n\n'
+CONTETN_FORMAT = '* {}\n\n'
+SECOND_CONTETN_FORMAT = '  * {}\n\n'
 
 CATALOGUE_FORMAT = '{}\n<ul style="margin-top:0px;">{}</ul>\n'
-DETAILS_SUMMARY = '<details><summary><a href="{}">{}</a></summary><ul style="margin-top:0px;">{}</ul></details>\n'
+DETAILS_SUMMARY = '<details><summary><a href="{}">{}</a></summary><ul style="margin-top:0px;">{}</ul></details>\n\n'
 HTML_CONTENT_FORMART = '<li><a href="{}">{}</a></li>\n'
-HTML_SECOND_CONTENT_FORMART = '<ul style="margin-top:0px;">{}</ul>'
+HTML_SECOND_CONTENT_FORMART = '<ul style="margin-top:0px;">{}</ul>\n'
 URL_FORMAT = '{}#{}'
 
-CONFIG_CATALOGUE_DEPTH = 3
+CONFIG_CATALOGUE_DEPTH = 4
 class ReadmeInfo:
     def __init__(self, root_path:Path, file_path:Path) -> None:
         self.name = file_path.parent.name
@@ -64,8 +64,8 @@ class ReadmeInfo:
     
     def to_catalogue(self, title=None, url_pre=True):
         content = ''
-        for item in self.catalogue[1:]:
-            content += HTML_CONTENT_FORMART.format(URL_FORMAT.format(str(self), item[0]), item[0])
+        for item in self.catalogue[1:] if title else self.catalogue:
+            content += HTML_CONTENT_FORMART.format(URL_FORMAT.format(str(self) if url_pre else '', item[0]), item[0])
             if len(item[1]) > 0:
                 second_content = ''
                 for cata in item[1]:
@@ -124,7 +124,7 @@ def print_tree(catalogue_tree, index=0):
         else:
             print("    " * index, value)
 
-def generate_catalogue_content(catalogue, pre_key='', index=2):
+def generate_catalogue_content(catalogue, pre_key='', index=3):
     file_content = ''
     # TODO use class to sort
     for key, value in sorted(catalogue.items(), key=lambda x: len(x[1])):
@@ -149,9 +149,10 @@ def generate_readme(root_path, readme_path, title, catalogue, tile):
     catalogue_content = generate_catalogue_content(catalogue)
     main_readme_info = ReadmeInfo(root_path, readme_path) 
     with open(readme_path, 'w+', encoding='utf-8') as f:
-        f.write(title)
+        f.write(title + '\n')
         f.write(SPLIT_TITLE + "\n")
-        f.write(main_readme_info.to_catalogue(TITLE_CATALOGUE, False))
+        f.write(main_readme_info.to_catalogue(TITLE_CATALOGUE, False) + '\n')
+        f.write('## Content\n')
         f.write(catalogue_content)
         f.write(SPLIT_TILE + "\n")
         f.write(tile)
@@ -164,5 +165,7 @@ if __name__ == '__main__':
         content = f.read()
     title, tile = get_title_and_tile(content)
     catalogue = generate_catalogue(root_path)
+    generate_readme(root_path, readme_path ,title, catalogue, tile)
+    # TODO recall for update catalogue
     generate_readme(root_path, readme_path ,title, catalogue, tile)
     print("Success to generate RAEDME.md")
