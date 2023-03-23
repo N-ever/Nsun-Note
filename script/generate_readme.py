@@ -52,13 +52,12 @@ class ReadmeInfo:
     # Generate parent list as ['vr', 'openxr']
     def generate_parent_list(self):
         relative_path = self.file_path.relative_to(self.root_path)
-        parent_list = [i.name for i in relative_path.parents[::-1]][1:]
+        parent_list = [i.name for i in relative_path.parents][::-1][1:]
         return parent_list
 
     def __str__(self) -> str:
         return str(self.file_path.relative_to(self.root_path)).replace('\\', '/')
 
-        
     def __len__(self):
         return 0 
     

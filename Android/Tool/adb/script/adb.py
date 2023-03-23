@@ -4,14 +4,15 @@ This is a script for adb
 import subprocess
 import time
 import re
-import inspect
-import ctypes
+import sys 
 from threading import Thread
 
 import argparse
 parser = argparse.ArgumentParser(description='This is a script for adb.')
 parser.add_argument('-p', '--package', type=str, help='Package you need to debug.')
 parser.add_argument('-i', '--interactive', action='store_true', help='Interactive mode.')
+parser.add_argument('getpid', nargs='*', help='Interactive mode.')
+parser.add_argument('package', nargs='*', help='Use package.')
 
 '''
     Constants
@@ -59,7 +60,6 @@ class InteractiveSystem:
     def __init__(self, package) -> None:
         self.package = package
         self._running = False
-        self._adbTool = AdbTool()
 
     # Start to get cmd for debug
     def start(self):
@@ -68,7 +68,7 @@ class InteractiveSystem:
             # Get input from user
             try:
                 cmd = input('$ ')
-                rst = self._parseCmd(cmd)
+                rst = _execCmd(cmd, self.package)
 
                 # Exit interactive system if call exit()
                 if RESULT_EXIT == rst:
@@ -76,19 +76,6 @@ class InteractiveSystem:
             except EOFError:
                 pass
             
-    # Parse cmd
-    def _parseCmd(self, cmd: str):
-        if CMD_EXIT == cmd:
-            return RESULT_EXIT
-        if cmd.startswith(CMD_LOGCAT):
-            self._adbTool.logcat(cmd.split(' ')[1:]) 
-        elif cmd.startswith(CMD_PACKAGE_LOGCAT):
-            self._adbTool.logcat(cmd.split(' ')[2:], self.package) 
-        elif cmd.startswith(CMD_GET_PID):
-            self._adbTool.getPackagePid(self.package) 
-        else:
-            self._adbTool.default(*cmd.split(' '))
-        return 0
 
 # Adb commands
 class AdbTool:
@@ -104,7 +91,7 @@ class AdbTool:
         rst = self.rePs.match(result)
         if rst:
             return int(rst.group(2))
-        return 0
+        return 0 
     
     # Make sure only the current thread can print
     def _print(self, printId, *args, **kwargs):
@@ -112,7 +99,7 @@ class AdbTool:
             print(*args, **kwargs)
     
     def _logcatThread(self, status, cmd, package, preFunc=None):
-        pid = 0
+        pid = None
         # Start check package thread to listen pid change
         if package:
             pStatus = self.checkPackageStatus(package)
@@ -124,7 +111,11 @@ class AdbTool:
             pid = pStatus[0]
 
         def startPrintThread(pid):
-            process = _cmd(cmd + [f'--pid={pid}'])
+            tCmd = cmd[:]
+            if pid:
+                tCmd += [f'--pid={pid}']
+            print(tCmd)
+            process = _cmd(tCmd)
             thread = Thread(target=self._logcatPrintThread, args=[process, self.printThread, preFunc])
             thread.setDaemon(True)
             thread.start()
@@ -139,14 +130,15 @@ class AdbTool:
                 self.printThread += 1 
                 process = startPrintThread(pid)
                 needToRestart = False
-            if pid != pStatus[0]:
+            if package and pid != pStatus[0]:
                 if pStatus[0] != 0:
                     pid = pStatus[0]
                     needToRestart = True
         self.printThread += 1 
         if process: 
             process.kill()
-        pStatus[1] = False
+        if package:
+            pStatus[1] = False
 
     def _logcatPrintThread(self, process, printId, preFunc=None):
             while process.poll() is None:
@@ -195,6 +187,22 @@ class AdbTool:
 '''
     Main Functions
 '''
+_adbTool = AdbTool()
+
+# Exec cmd
+def _execCmd(cmd: str, package=None):
+    if CMD_EXIT == cmd:
+        return RESULT_EXIT
+    if cmd.startswith(CMD_LOGCAT):
+        _adbTool.logcat(cmd.split(' ')[1:]) 
+    elif cmd.startswith(CMD_PACKAGE_LOGCAT):
+        _adbTool.logcat(cmd.split(' ')[2:], package) 
+    elif cmd.startswith(CMD_GET_PID):
+        print(_adbTool.getPackagePid(package))
+    else:
+        _adbTool.default(*cmd.split(' '))
+    return 0
+
 def _interactive(package):
     _verboseLog('Coming into the interactive mode for debug')
     interactiveSystem = InteractiveSystem(package)
@@ -202,8 +210,14 @@ def _interactive(package):
 
 def main(args):
     if args.interactive:
-        assert args.package, 'Interactive mode need package to debug.'
         _interactive(args.package)
+    else:
+        # TODO make all cmd the same
+        cmd = sys.argv[1:]
+        indexP = cmd.index('-p')
+        cmd.pop(indexP)
+        cmd.pop(indexP)
+        _execCmd(' '.join(cmd), args.package)
 
 if __name__ == '__main__':
     args = parser.parse_args()
