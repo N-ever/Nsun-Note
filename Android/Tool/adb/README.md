@@ -57,6 +57,15 @@ python .\adb.py -i -p org.freedesktop.monado.openxr_runtime.out_of_process
 $ package logcat
 ```
 
+### Stack
+
+通过库文件进行函数堆栈定位
+
+```shell
+python .\adb.py  -p com.khronos.hello_xr -i -s D:\xxx\libopenxr_monado.so -s C:\xxx\libhello_xr.so -s C:\xxx\libopenxr_loader.so
+$ package stack
+```
+
 ### 其他
 
 未定义的adb命令（除了`adb shell`进入shell模式）可以直接在Interactive模式下省略adb后进行使用，与原效果一致。
