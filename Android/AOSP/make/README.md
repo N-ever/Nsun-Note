@@ -177,3 +177,20 @@ OUT_DIR=out
 make -j8 										# 以8线程进行编译
 ```
 
+### Make SDK
+
+主要是打包Emu镜像分享使用。
+
+```
+make sdk sdk_repo -j8
+```
+
+正常情况下`out/host/linux-x86/sdk/sdk_car_arm6`目录下存在`sdk-repo-linux-system-images-eng.[username].zip`可以使用，如果不存在使用下面的命令独立打包Emu文件。
+
+### Make Emu
+
+```
+make emu_img_zip
+```
+
+最终生成`out/target/product/emulator_arm64/sdk-repo-linux-system-images-eng.root.zip`。

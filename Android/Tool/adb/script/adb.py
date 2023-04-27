@@ -20,7 +20,8 @@ parser.add_argument('-s', '--stack', action='append', help='so libraries.')
     Constants
 '''
 # TODO Can get from env
-ADB_PATH = 'adb'
+# ADB_PATH = ['adb', '-s', '127.0.0.1:1111']
+ADB_PATH = ['adb']
 
 RESULT_EXIT = -1
 RESULT_SUCCESS = 0
@@ -50,10 +51,13 @@ def _verboseLog(err):
     print('Verbose:', err)
 
 def _cmd(cmd, block=False):
-    # print(cmd)
-    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     if block:
-        result = p.communicate()[0].decode('utf-8').strip()
+        try:
+            result = p.stdout.read().decode('utf-8').strip()
+            # result = p.communicate()[0].decode('utf-8').strip()
+        except:
+            pass
         return result
     return p
 
@@ -91,11 +95,14 @@ class AdbTool:
 
     # Get pid by package name
     def getPackagePid(self, package):
-        cmd = [ADB_PATH, CMD_SHELL, f'ps -A | grep {package}']
+        cmd = ADB_PATH + [CMD_SHELL, 'ps', '-A', '|', 'grep', package]
         result = _cmd(cmd, block=True)
         rst = self.rePs.match(result)
         if rst:
-            return int(rst.group(2))
+            try:
+                return int(rst.group(2))
+            except Exception as e:
+                print(e.args)
         return 0
 
     # Make sure only the current thread can print
@@ -106,7 +113,6 @@ class AdbTool:
     def _logcatThread(self, status, cmd, package, preFunc=None):
         pid = None
         # Start check package thread to listen pid change
-        print(package)
         if package:
             pStatus = self.checkPackageStatus(package)
             index = 0
@@ -120,10 +126,9 @@ class AdbTool:
             tCmd = cmd[:]
             if pid:
                 tCmd += [f'--pid={pid}']
-            print(tCmd)
             process = _cmd(tCmd)
             thread = Thread(target=self._logcatPrintThread, args=[process, self.printThread, preFunc])
-            thread.setDaemon(True)
+            thread.daemon = True
             thread.start()
             return process
 
@@ -148,7 +153,10 @@ class AdbTool:
 
     def _logcatPrintThread(self, process, printId, preFunc=None):
             while process.poll() is None:
-                content = process.stdout.readline().decode('utf-8').strip()
+                try:
+                    content = process.stdout.readline().decode('utf-8').strip()
+                except:
+                    pass
                 if preFunc:
                     content = preFunc(content)
                 self._print(printId, content)
@@ -173,7 +181,7 @@ class AdbTool:
 
     def logcat(self, args, package=None, stack=None):
         status = [True,]
-        cmd = [ADB_PATH, CMD_LOGCAT]
+        cmd = ADB_PATH + [CMD_LOGCAT]
         cmd.extend(args)
 
         def stackFunc(content):
@@ -197,7 +205,7 @@ class AdbTool:
             preFunc = stackFunc
 
         thread = Thread(target=self._logcatThread, args=[status, cmd, package, preFunc])
-        thread.setDaemon(True)
+        thread.daemon = True
         thread.start()
         input()
         status[0] = False
@@ -206,7 +214,7 @@ class AdbTool:
         print(MSG_QUIT_CMD.format(CMD_LOGCAT))
 
     def default(self, *args):
-        cmd = [ADB_PATH]
+        cmd = ADB_PATH
         cmd.extend(args)
         result = _cmd(cmd, block=True)
         print(result)

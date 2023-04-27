@@ -69,6 +69,14 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 ```
 
+#### 配置主题字体
+
+```shell
+git clone https://github.com/powerline/fonts.git --depth=1
+cd font
+./install.sh
+```
+
 ### 配置.zshrc
 
 ```

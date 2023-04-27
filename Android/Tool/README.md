@@ -23,6 +23,9 @@ while true;do gpu_info=`cat /sys/class/kgsl/kgsl-3d0/gpubusy`;left=${gpu_info% *
 while true; do busy=`cat /sys/class/kgsl/kgsl-3d0/gpu_busy_percentage`;echo -ne "$busy    \r";done
 # or
 while true; do busy=`cat /sys/devices/platform/soc/3d00000.qcom,kgsl-3d0/devfreq/3d00000.qcom,kgsl-3d0/gpu_load`;echo -ne "$busy%    \r";sleep 0.1;done
+
+# RK
+while true; do busy=`cat /sys/devices/platform/fb000000.gpu/devfreq/fb000000.gpu/load`;echo -ne "$busy%    \r";sleep 0.2;done
 ```
 
 ### 打印GPU工作频率
