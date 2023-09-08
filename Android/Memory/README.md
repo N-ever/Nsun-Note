@@ -18,3 +18,9 @@
 while true;do data=`date +"%m-%d %H:%M:%S.%N"`;meminfo=`dumpsys meminfo `; free_ram=`echo $meminfo | grep -Eo 'Free RAM:[[:space:]][^[:space:]]+'`;used_ram=`echo $meminfo | grep -Eo 'Used RAM:[[:space:]][^[:space:]]+'`;lost_ram=`echo $meminfo | grep -Eo 'Lost RAM:[[:space:]][^[:space:]]+'`;echo $data ${free_ram%\(*} ${used_ram%\(*} ${lost_ram%\(*};sleep 0.1;done
 ```
 
+#### 保存成文件
+
+```
+while true;do data=`date +"%m-%d %H:%M:%S.%N"`;meminfo=`dumpsys meminfo `; free_ram=`echo $meminfo | grep -Eo 'Free RAM:[[:space:]][^[:space:]]+'`;used_ram=`echo $meminfo | grep -Eo 'Used RAM:[[:space:]][^[:space:]]+'`;lost_ram=`echo $meminfo | grep -Eo 'Lost RAM:[[:space:]][^[:space:]]+'`;echo $data ${free_ram%\(*} ${used_ram%\(*} ${lost_ram%\(*}; echo $meminfo >> meminfo.log; sleep 0.1;done
+```
+
