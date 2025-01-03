@@ -3,6 +3,40 @@
         AOSP Make
     </h1>
 </center>
+## Env
+
+[Android Env](https://source.android.google.cn/docs/setup/initializing?hl=zh-tw)
+
+### Ubuntu
+
+```
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z-dev ccache libgl1-mesa-dev libxml2-utils xsltproc unzip
+sudo apt install libssl-dev
+sudo apt install libncurses5
+sudo apt install libcurl4-openssl-dev
+sudo apt install python
+sudo apt install device-tree-compiler
+```
+
+### Mac
+
+```
+hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 500g ~/Work/evern/vol/android.dmg
+hdiutil attach ~/Work/evern/vol/android.dmg.sparseimage -mountpoint /Volumes/android
+hdiutil detach /Volumes/android
+```
+
+
+
+### CCache
+
+```
+export USE_CCACHE=1
+export CCACHE_DIR=/<path_of_your_choice>/.ccache
+prebuilts/misc/linux-x86/ccache/ccache -M 50G
+```
 
 ## Get AOSP Code
 
@@ -27,7 +61,7 @@ source ~/.zshrc
 ```shell
 sudo apt-get install curl
 
-mkdir ~/usr/bin 											# 创建执行命令的目录，并将他放到PATH中。
+mkdir -p ~/usr/bin 											# 创建执行命令的目录，并将他放到PATH中。
 echo "export PATH=~/usr/bin:\$PATH" >> ~/.zshrc 			# 如果使用的是bash就重定向到~/.bashrc
 source ~/.zshrc 											# 同上如果是bash就source ~/.bashrc
 
@@ -194,3 +228,40 @@ make emu_img_zip
 ```
 
 最终生成`out/target/product/emulator_arm64/sdk-repo-linux-system-images-eng.root.zip`。
+
+## 系统签名
+
+```
+cd build\target\product\security
+
+openssl pkcs8 -in platform.pk8 -inform DER -outform PEM -out platform.pem -nocrypt
+
+openssl pkcs12 -export -in platform.x509.pem -inkey platform.pem -out platform.pk12 -name android
+# 密码：android
+
+keytool -importkeystore -deststorepass android -destkeystore platform.jks -srckeystore platform.pk12 -srcstoretype PKCS12 -srcstorepass android
+
+keytool -list -v -keystore platform.jks
+# 密码：android
+```
+
+build.gradle
+
+```
+signingConfigs {
+		config {
+        storeFile file("platform.jks")
+        storePassword 'android'
+        keyAlias 'android'
+        keyPassword 'android'
+    }
+}
+ 
+buildTypes {
+    debug {
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        signingConfig signingConfigs.config
+    }
+}
+```
+

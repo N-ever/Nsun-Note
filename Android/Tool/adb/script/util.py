@@ -1,6 +1,7 @@
 import datetime
 import subprocess
 
+# ADB_PATH = ['adb', '-s', '127.0.0.1:1111']
 ADB_PATH = ['adb']
 
 class Log:

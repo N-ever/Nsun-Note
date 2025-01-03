@@ -2,8 +2,11 @@ import re
 
 from util import Log, cmd, ADB_PATH
 
+global index
+index = 0
 class LayerInfo:
     def __init__(self, content) -> None:
+        global index
         self.content = content
         self.type = None
         self.name = None
@@ -13,6 +16,8 @@ class LayerInfo:
         self.params = {}
         self.children = set()
         self.parse_layer()
+        self.index = index
+        index += 1
 
     def parse_layer(self):
         reLayer = re.compile(r'\+\s(\S+Layer)\s\((.*)\)\suid=(\d+)\s+'
@@ -47,12 +52,16 @@ class LayerInfo:
         )
 
 
-    def update_children(self, layers):
-        for layer in layers:
-            if layer.parent == self.name:
-                self.children.add(layer)
-                # layer.update_children(layers)
-
+    def update_parent(self, layers, index):
+        for layer in reversed(layers[0:index]):
+            if self.parent == layer.name:
+                layer.children.add(self)
+                return
+        for layer in reversed(layers[index:len(layers)]):
+            if self.parent == layer.name:
+                layer.children.add(self)
+                return
+        print(str(self) + ' do not find parent')
 
 class SurfaceFlingerInfo:
     def __init__(self, content) -> None:
@@ -63,8 +72,8 @@ class SurfaceFlingerInfo:
 
     def parse_layers_info(self):
         def update_layer_group(layerGroup):
-            for layer in layerGroup:
-                layer.update_children(layerGroup)
+            for index, layer in enumerate(layerGroup):
+                layer.update_parent(layerGroup, index)
             self.layers.extend(layerGroup)
         reLayer = re.compile(r'\+\s\S+Layer.*?(?=\+\s\S+Layer|\Z|Offscreen\sLayers)', re.DOTALL)
         rst = reLayer.findall(self.content)
@@ -79,10 +88,13 @@ class SurfaceFlingerInfo:
             layerGroup.append(layerInfo)
         update_layer_group(layerGroup)
 
-
+    global count
+    count = 0
     def dump_layer_tree(self):
         def dump_layer_tree_internal(layer, prefix):
-            Log.d(prefix + layer.name)
+            global count
+            count += 1
+            Log.d(prefix + layer.name + ' z: ' + layer.params['z'] + ' flags: ' + layer.params['flags'] + " " + str(count) + ' ' + str(layer.index))
             for child in layer.children:
                 dump_layer_tree_internal(child, prefix + '  | ')
 
@@ -93,6 +105,8 @@ class SurfaceFlingerInfo:
 def get_surfaceflinger_info():
     dumpsysCmd = ADB_PATH + ['shell', 'dumpsys', 'SurfaceFlinger']
     content = cmd(dumpsysCmd, block=True)
+    # with open("/Users/evern.zhu/Downloads/surfaceflinger1.txt", 'r+') as f:
+    #     content = f.read()
     return SurfaceFlingerInfo(content)
 
 def dump_surfaceflinger():

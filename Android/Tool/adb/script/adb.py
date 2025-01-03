@@ -13,6 +13,7 @@ parser = argparse.ArgumentParser(description='This is a script for adb.')
 parser.add_argument('-p', '--package', type=str, help='Package you need to debug.')
 parser.add_argument('-i', '--interactive', action='store_true', help='Interactive mode.')
 parser.add_argument('-s', '--stack', action='append', help='so libraries.')
+parser.add_argument('-k', '--kill', action='append', help='kill package')
 # parser.add_argument('getpid', nargs='*', help='Interactive mode.')
 # parser.add_argument('package', nargs='*', help='Use package.')
 
@@ -33,6 +34,7 @@ CMD_PACKAGE = 'package'
 CMD_SHELL = 'shell'
 CMD_STACK = 'stack'
 CMD_GET_PID = 'getpid'
+CMD_KILL = 'kill'
 
 MSG_ENTER_TO_QUIT = 'Enter to quit:'
 MSG_QUIT_CMD = 'CMD - {} - finished.'
@@ -51,7 +53,8 @@ def _verboseLog(err):
     print('Verbose:', err)
 
 def _cmd(cmd, block=False):
-    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    print(cmd)
+    p = subprocess.Popen(' '.join(cmd), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
     if block:
         try:
             result = p.stdout.read().decode('utf-8').strip()
@@ -95,7 +98,7 @@ class AdbTool:
 
     # Get pid by package name
     def getPackagePid(self, package):
-        cmd = ADB_PATH + [CMD_SHELL, 'ps', '-A', '|', 'grep', package]
+        cmd = ADB_PATH + [CMD_SHELL, 'ps', '-A', '|', 'grep', f'{package}$']
         result = _cmd(cmd, block=True)
         rst = self.rePs.match(result)
         if rst:
@@ -104,6 +107,19 @@ class AdbTool:
             except Exception as e:
                 print(e.args)
         return 0
+
+
+    def kill(self, package):
+        for pkg in package:
+            pid = self.getPackagePid(pkg)
+            if pid > 0:
+                cmd = ADB_PATH + [CMD_SHELL, 'kill', str(pid)]
+                _ = _cmd(cmd, block=True)
+                print('Kill {} success, pid {}'.format(pkg, pid))
+            else:
+                print('No process found for {}'.format(pkg))
+                
+
 
     # Make sure only the current thread can print
     def _print(self, printId, *args, **kwargs):
@@ -183,6 +199,7 @@ class AdbTool:
         status = [True,]
         cmd = ADB_PATH + [CMD_LOGCAT]
         cmd.extend(args)
+        print(cmd)
 
         def stackFunc(content):
             libMap = {}
@@ -229,7 +246,7 @@ def _execCmd(cmd: str, package=None, stack=None):
     if CMD_EXIT == cmd:
         return RESULT_EXIT
     if cmd.startswith(CMD_LOGCAT):
-        _adbTool.logcat(cmd.split(' ')[1:])
+        _adbTool.logcat(cmd.split(' ')[1:], None, stack)
     elif cmd.startswith(CMD_PACKAGE):
         secCmd = cmd.split(' ')[1]
         if secCmd == CMD_LOGCAT:
@@ -238,6 +255,8 @@ def _execCmd(cmd: str, package=None, stack=None):
             _adbTool.logcat(cmd.split(' ')[2:], package, stack)
     elif cmd.startswith(CMD_GET_PID):
         print(_adbTool.getPackagePid(package))
+    elif cmd.startswith(CMD_KILL):
+        _adbTool.kill(package)
     else:
         _adbTool.default(*cmd.split(' '))
     return 0
@@ -253,10 +272,13 @@ def main(args):
     else:
         # TODO make all cmd the same
         cmd = sys.argv[1:]
-        indexP = cmd.index('-p')
-        cmd.pop(indexP)
-        cmd.pop(indexP)
-        _execCmd(' '.join(cmd), args.package, args.stack)
+        if args.package:
+            indexP = cmd.index('-p')
+            cmd.pop(indexP)
+            cmd.pop(indexP)
+            _execCmd(' '.join(cmd), args.package, args.stack)
+        elif args.kill:
+            _execCmd(CMD_KILL, package=args.kill)
 
 if __name__ == '__main__':
     args = parser.parse_args()
